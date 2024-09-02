@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Library</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-y: scroll;
+        }
+        .top-bar {
+            background-color: #2e3a47;
+            height: 1.5cm;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            justify-content: flex-end; /* Элементы выравниваются по правому краю */
+        }
+        .brand {
+            color: #ccc; /* Серый цвет текста */
+            font-family: 'Roboto', sans-serif; /* шрифт */
+            font-size: 18px; /* Размер шрифта */
+            align-items: center;
+            margin-right: 150px; /* Отступ слева */
+        }
+        .language-buttons {
+            display: flex;
+            align-items: center;
+            margin-right: 20px; /* Сдвиг ближе к окну поиска */
+        }
+        .language-button {
+            padding: 3px 7px; /* Уменьшенный размер кнопок */
+            border: 2px solid #ccc; /* Серый контур */
+            border-radius: 4px;
+            background-color: #2e3a47; /* Цвет кнопки соответствует цвету топ-бара */
+            color: #ccc; /* Серый текст */
+            font-size: 12px; /* Уменьшенный размер шрифта */
+            cursor: pointer;
+            margin-right: 5px; /* Расстояние между кнопками */
+        }
+        .language-button:hover {
+            background-color: #1f2a35; /* Более темный оттенок при наведении */
+            border-color: #999; /* Темнее контур при наведении */
+            color: #999; /* Темнее текст при наведении */
+        }
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-right: 100px; /* Расстояние до следующего элемента */
+        }
+        .search-input {
+            padding: 5px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 200px; /* Ширина поля ввода */
+        }
+        .search-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff; /* Цвет кнопки поиска */
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 5px; /* Отступ между полем ввода и кнопкой */
+        }
+        .search-button:hover {
+            background-color: #0056b3; /* Цвет кнопки при наведении */
+        }
+        .welcome-message {
+            font-size: 14px;
+            color: #fff;
+            margin-right: 20px; /* Расстояние до следующего элемента */
+        }
+        .logout-link {
+            text-decoration: none;
+            color: #ff6600; /* Оранжевый цвет */
+            font-size: 16px;
+        }
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+        .button-group {
+            margin-top: 1.5cm; /* Расстояние от топ-бара */
+            padding: 20px;
+            text-align: center;
+        }
+        .button-group button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 2px;
+            background-color: #007bff; /* Цвет кнопок */
+            color: white;
+            font-size: 10px;
+            cursor: pointer;
+            margin: 0 10px; /* Расстояние между кнопками */
+        }
+        .button-group button:hover {
+            background-color: #0056b3; /* Цвет кнопки при наведении */
+        }
+        .content {
+            margin-top: -1cm;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center; /* Центрирование кнопок */
+            gap: 10px; /* Расстояние между кнопками */
+            width: 150px; /* Ширина столбца действий */
+        }
+        .action-buttons form {
+            margin: 0;
+        }
+        .action-buttons form button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .action-buttons form button.add {
+            background-color: #4CAF50;
+        }
+        .action-buttons form button.delete:hover {
+            background-color: #cc0000;
+        }
+        .action-buttons form button.add:hover {
+            background-color: #45a049;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .modal-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .modal-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="top-bar">
+    <div class="brand">Online library</div>
+    <div class="language-buttons">
+        <button class="language-button">Рус</button>
+        <button class="language-button">Engl</button>
+    </div>
+    <div class="search-form">
+        <input type="text" class="search-input" placeholder="Поиск...">
+        <button class="search-button">Поиск</button>
+    </div>
+    <div class="welcome-message">
+        Добро пожаловать, <span th:text="${user.firstName}">Имя</span>!
+    </div>
+    <a class="logout-link" href="/logout">Выход</a>
+</div>
+<div class="button-group">
+    <button th:onclick="'/admin/authors/get'">Авторы</button>
+    <button th:onclick="'/genres'">Жанры</button>
+    <button th:onclick="'/publishers'">Издатели</button>
+    <button th:onclick="loadBooks()">Книги</button>
+</div>
+<div class="content">
+    <table>
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Количество страниц</th>
+            <th>ISBN</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.name}">Название</td>
+            <td th:text="${book.pageCount}">Количество страниц</td>
+            <td th:text="${book.isbn}">ISBN</td>
+            <td class="action-buttons">
+                <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post">
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="submit" class="delete">Удалить</button>
+                </form>
+                <button type="button" class="add" onclick="openModal()">Добавить книгу</button>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(books)}">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="action-buttons">
+                <button type="button" class="add" onclick="openModal()">Добавить книгу</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Добавить книгу</h2>
+        <form th:action="@{/books/create-book}" method="post" enctype="multipart/form-data">
+            <input type="text" name="name" class="modal-input" placeholder="Название книги" required>
+            <input type="number" name="pageCount" class="modal-input" placeholder="Количество страниц" required>
+            <input type="text" name="isbn" class="modal-input" placeholder="ISBN" required>
+            <input type="file" name="content" class="modal-input" accept=".pdf" required>
+            <input type="file" name="imageBytes" class="modal-input" accept="image/*" required>
+            <button type="submit" class="modal-button">Сохранить</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById("addModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("addModal").style.display = "none";
+    }
+</script>
+</body>
+</html>

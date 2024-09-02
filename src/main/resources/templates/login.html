@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            background-color: #2e3a47; /* Серо-синий фон */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            position: relative; /* Для позиционирования фонового текста */
+        }
+        .background-text {
+            position: absolute;
+            top: 10%; /* Расположим текст немного ниже верхнего края */
+            left: 50%;
+            transform: translate(-50%, 0); /* Уберем вертикальный центр */
+            font-size: 3em;
+            color: rgba(255, 255, 255, 0.1); /* Легкий белый цвет */
+            white-space: nowrap; /* Не переносить текст */
+            z-index: 0; /* Положение за основным содержимым */
+            pointer-events: none; /* Не мешает кликам */
+            text-align: center; /* Выравнивание по центру */
+        }
+        .login-container {
+            background-color: #1c2a38; /* Темный фон контейнера */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #fff;
+            position: relative; /* Для правильного наложения на фон */
+            z-index: 1; /* Выше фонового текста */
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #fff;
+            width: 100%;
+            text-align: left;
+        }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 20px); /* Учет padding-а */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745; /* Светло-зеленый цвет */
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: calc(100% - 20px); /* Совпадает с шириной полей ввода */
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838; /* Темнее зеленый при наведении */
+        }
+        p {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="background-text">Онлайн библиотека</div>
+<div class="login-container">
+    <form action="/login" method="post">
+        <div>
+            <label for="login">Имя пользователя:</label>
+            <input type="text" id="login" name="username" required>
+        </div>
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Войти</button>
+        <!-- Отображение сообщения об ошибке -->
+        <p th:if="${param.error}">Invalid username or password.</p>
+    </form>
+</div>
+</body>
+</html>

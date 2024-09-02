@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Library</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-y: scroll;
+        }
+        .top-bar {
+            background-color: #2e3a47;
+            height: 1.5cm;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
+            justify-content: flex-end; /* Элементы выравниваются по правому краю */
+        }
+        .brand {
+            color: #ccc; /* Серый цвет текста */
+            font-family: 'Roboto', sans-serif; /* шрифт */
+            font-size: 18px; /* Размер шрифта */
+            align-items: center;
+            margin-right: 150px; /* Отступ слева */
+        }
+        .language-buttons {
+            display: flex;
+            align-items: center;
+            margin-right: 20px; /* Сдвиг ближе к окну поиска */
+        }
+        .language-button {
+            padding: 3px 7px; /* Уменьшенный размер кнопок */
+            border: 2px solid #ccc; /* Серый контур */
+            border-radius: 4px;
+            background-color: #2e3a47; /* Цвет кнопки соответствует цвету топ-бара */
+            color: #ccc; /* Серый текст */
+            font-size: 12px; /* Уменьшенный размер шрифта */
+            cursor: pointer;
+            margin-right: 5px; /* Расстояние между кнопками */
+        }
+        .language-button:hover {
+            background-color: #1f2a35; /* Более темный оттенок при наведении */
+            border-color: #999; /* Темнее контур при наведении */
+            color: #999; /* Темнее текст при наведении */
+        }
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-right: 100px; /* Расстояние до следующего элемента */
+        }
+        .search-input {
+            padding: 5px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 200px; /* Ширина поля ввода */
+        }
+        .search-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff; /* Цвет кнопки поиска */
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 5px; /* Отступ между полем ввода и кнопкой */
+        }
+        .search-button:hover {
+            background-color: #0056b3; /* Цвет кнопки при наведении */
+        }
+        .welcome-message {
+            font-size: 14px;
+            color: #fff;
+            margin-right: 20px; /* Расстояние до следующего элемента */
+        }
+        .logout-link {
+            text-decoration: none;
+            color: #ff6600; /* Оранжевый цвет */
+            font-size: 16px;
+        }
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+        .content {
+            margin-top: 2cm;
+            padding: 20px;
+        }
+        .secondary-bar {
+            background-image: url("/wood.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 5cm; /* Высота элемента */
+            width: 100%;
+            position: fixed;
+            top: 1.5cm; /* Сразу под основным топ-баром */
+            left: 0;
+            z-index: 0; /* Под основным топ-баром */
+        }
+        .shelf {
+            background-color: #c9a58b; /* Светло-коричневый цвет полки */
+            height: 3mm; /* Толщина полки */
+            width: calc(100% - 400px); /* Ширина полки чуть меньше ширины .secondary-bar */
+            position: absolute;
+            bottom: 30px; /* Расстояние от низа .secondary-bar */
+            left: 50%;
+            transform: translateX(-50%); /* Центрирование полки по горизонтали */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 1.7);
+        }
+        .genres-menu {
+            background-color: #f4f4f4; /* Светлый фон для меню */
+        width: 250px; /* Ширина меню */
+            height: calc(50vh - 1.5cm - 5cm); /* Высота меню, исключая топ-бар и вторичный бар */
+            position: fixed;
+            top: 6.5cm; /* Сразу под основным топ-баром */
+            left: 20px;
+            z-index: 0; /* Поверх вторичного бара */
+<!--            overflow-y: auto; /* Скролл для меню */-->
+            padding: 10px;
+        }
+        .genres-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        .genres-menu li {
+            margin: 10px 0;
+        }
+        .genres-menu a {
+            text-decoration: none;
+            color: #333; /* Цвет текста ссылок */
+            font-size: 12px;
+        }
+        .genres-menu a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="top-bar">
+    <div class="brand">Online library</div>
+    <div class="language-buttons">
+        <button class="language-button">Рус</button>
+        <button class="language-button">Engl</button>
+    </div>
+    <div class="search-form">
+        <input type="text" class="search-input" placeholder="Поиск...">
+        <button class="search-button">Поиск</button>
+    </div>
+    <div class="welcome-message">
+        Добро пожаловать, <span th:text="${user.firstName}">Имя</span>!
+    </div>
+    <a class="logout-link" href="/logout">Выход</a>
+</div>
+<div class="secondary-bar">
+    <div class="shelf"></div>
+</div>
+<div class="genres-menu">
+    <ul id="genres-list">
+        <!-- Сюда будут вставляться жанры -->
+    </ul>
+</div>
+<div class="content">
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/genres/get-names')
+            .then(response => response.json())
+            .then(genres => {
+
+            console.log('Пришли жанры:', genres);
+                const genresList = document.getElementById('genres-list');
+                genres.forEach(genre => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<a href="#">${genre}</a>`;
+                    genresList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Ошибка загрузки жанров:', error));
+    });
+</script>
+</body>
+</html>
