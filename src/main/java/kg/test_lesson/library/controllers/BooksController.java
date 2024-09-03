@@ -7,6 +7,7 @@ import kg.test_lesson.library.mapper.BookMapper;
 import kg.test_lesson.library.services.BookService;
 import kg.test_lesson.library.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/books")
@@ -87,6 +90,19 @@ public class BooksController {
     public String deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
         return "redirect:/books/get";
+    }
+
+    @GetMapping("/get-image")
+    public ResponseEntity<List<String>> getImage() {
+        List<byte[]> bytes = bookService.getImage();
+        if (!bytes.isEmpty()) {
+            List<String> base64Images = bytes.stream()
+                    .map(bytess -> Base64.getEncoder().encodeToString(bytess))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(base64Images);
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
 
 }

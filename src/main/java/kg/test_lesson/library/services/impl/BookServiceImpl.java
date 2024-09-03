@@ -38,4 +38,9 @@ public class BookServiceImpl implements BookService {
     public void deleteBook(Long id) {
 
     }
+
+    @Override
+    public List<byte[]> getImage() {
+        return bookRepository.findAllImageBytes();
+    }
 }

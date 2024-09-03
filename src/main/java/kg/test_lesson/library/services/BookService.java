@@ -10,4 +10,5 @@ public interface BookService {
     void createBook(Books book);
     void updateBook(Long id, Books book);
     void deleteBook(Long id);
+    List<byte[]> getImage();
 }

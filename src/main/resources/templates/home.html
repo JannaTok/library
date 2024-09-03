@@ -181,8 +181,31 @@
                     genresList.appendChild(listItem);
                 });
             })
-            .catch(error => console.error('Ошибка загрузки жанров:', error));//
+            .catch(error => console.error('Ошибка загрузки жанров:', error));
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    fetch('/books/get-image')
+        .then(response => response.json())
+        .then(images => {
+            const contentDiv = document.querySelector('.content');
+            console.log('Received images:', images); // Логируем полученные изображения
+            if (Array.isArray(images) && images.length > 0) {
+                images.forEach(image => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = `data:image/jpeg;base64,${image}`;
+                    imgElement.style.maxWidth = '130px'; // задаем ширину изображения
+                    imgElement.style.marginTop = '18 0px'; // сдвигаем изображение вниз
+                    imgElement.style.marginLeft = '180px'; // сдвигаем изображение вправо
+                    contentDiv.appendChild(imgElement);
+                    console.log('Image element added:', imgElement); // Логируем добавленный элемент
+                });
+            } else {
+                console.log('No images to display');
+            }
+        })
+        .catch(error => console.error('Ошибка загрузки изображений:', error));
+});
 </script>
 </body>
 </html>
