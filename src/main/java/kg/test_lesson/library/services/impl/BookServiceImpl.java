@@ -1,12 +1,16 @@
 package kg.test_lesson.library.services.impl;
 
+import kg.test_lesson.library.dto.ImageDto;
+import kg.test_lesson.library.dto.ImageResponseDto;
 import kg.test_lesson.library.entities.Books;
-import kg.test_lesson.library.pepository.BookRepository;
+import kg.test_lesson.library.repository.BookRepository;
 import kg.test_lesson.library.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +24,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Books getBookById(Long id) {
-        return null;
+    public byte[] getBookById(Long id) {
+        return bookRepository.findBook(id);
     }
 
     @Override
@@ -36,11 +40,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(Long id) {
-
+        bookRepository.deleteById(id);
     }
 
     @Override
-    public List<byte[]> getImage() {
-        return bookRepository.findAllImageBytes();
+    public List<ImageResponseDto> getImage() {
+        List<ImageDto> imageDtos = bookRepository.findAllImageBytesAndName();
+        return imageDtos.stream().map(imageDto -> new ImageResponseDto(imageDto.getId(),
+                Base64.getEncoder().encodeToString(imageDto.getImageBytes()),
+                imageDto.getName())).collect(Collectors.toList());
     }
 }

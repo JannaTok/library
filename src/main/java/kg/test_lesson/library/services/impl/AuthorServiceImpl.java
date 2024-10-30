@@ -1,7 +1,7 @@
 package kg.test_lesson.library.services.impl;
 
 import kg.test_lesson.library.entities.Author;
-import kg.test_lesson.library.pepository.AuthorRepository;
+import kg.test_lesson.library.repository.AuthorRepository;
 import kg.test_lesson.library.services.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

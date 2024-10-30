@@ -1,14 +1,14 @@
 package kg.test_lesson.library.controllers;
 
 import kg.test_lesson.library.dto.BookCreateDTO;
+import kg.test_lesson.library.dto.ImageResponseDto;
 import kg.test_lesson.library.entities.Books;
 import kg.test_lesson.library.entities.Users;
 import kg.test_lesson.library.mapper.BookMapper;
 import kg.test_lesson.library.services.BookService;
 import kg.test_lesson.library.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,16 +41,22 @@ public class BooksController {
         return "book";
     }
 
-    @GetMapping("/{id}")
-    public String getBookById(@PathVariable Long id, Model model) {
-        Books book = bookService.getBookById(id);
-        model.addAttribute("book", book);
-        return "book-detail";
+    @GetMapping("/get-book/{id}")
+    public ResponseEntity<byte[]> getBookById(@PathVariable Long id) {
+        byte[] book = bookService.getBookById(id);
+        if (book != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDisposition(ContentDisposition.inline().build());
+            return new ResponseEntity<>(book, headers, HttpStatus.OK);
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
 
     @PostMapping("/create-book")
     public String createBook(@ModelAttribute BookCreateDTO book,
-                                        BindingResult bindingResult) throws IOException {
+                             BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             return "redirect:/errorPage";  // Редирект на страницу с ошибкой
         }
@@ -66,8 +72,8 @@ public class BooksController {
 
     @GetMapping("/edit/{id}")
     public String editBookForm(@PathVariable Long id, Model model) {
-        Books book = bookService.getBookById(id);
-        model.addAttribute("book", book);
+//        Books book = bookService.getBookById(id);
+//        model.addAttribute("book", book);
         return "book-edit";
     }
 
@@ -93,16 +99,12 @@ public class BooksController {
     }
 
     @GetMapping("/get-image")
-    public ResponseEntity<List<String>> getImage() {
-        List<byte[]> bytes = bookService.getImage();
-        if (!bytes.isEmpty()) {
-            List<String> base64Images = bytes.stream()
-                    .map(bytess -> Base64.getEncoder().encodeToString(bytess))
-                    .collect(Collectors.toList());
-            return ResponseEntity.ok(base64Images);
+    public ResponseEntity<List<ImageResponseDto>> getImage() {
+        List<ImageResponseDto> image = bookService.getImage();
+        if (!image.isEmpty()) {
+            return ResponseEntity.ok(image);
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }
-
 }

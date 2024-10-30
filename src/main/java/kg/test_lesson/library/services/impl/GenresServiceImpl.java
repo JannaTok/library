@@ -1,7 +1,7 @@
 package kg.test_lesson.library.services.impl;
 
 import kg.test_lesson.library.entities.Genres;
-import kg.test_lesson.library.pepository.GenresRepository;
+import kg.test_lesson.library.repository.GenresRepository;
 import kg.test_lesson.library.services.GenresService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

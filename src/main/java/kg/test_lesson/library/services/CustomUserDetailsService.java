@@ -1,9 +1,8 @@
 package kg.test_lesson.library.services;
 
 import kg.test_lesson.library.entities.Users;
-import kg.test_lesson.library.pepository.UserRepository;
+import kg.test_lesson.library.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
